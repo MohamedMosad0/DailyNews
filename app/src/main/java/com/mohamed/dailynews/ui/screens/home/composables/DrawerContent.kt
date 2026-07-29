@@ -20,11 +20,13 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,21 +49,22 @@ import com.mohamed.dailynews.ui.theme.Black
 import com.mohamed.dailynews.ui.theme.DailyNewsShapes
 import com.mohamed.dailynews.ui.theme.White
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DrawerContent(
-    currentTheme: AppTheme,
-    currentLanguage: AppLanguage,
-    onThemeSelect: (AppTheme) -> Unit,
-    onLanguageSelect: (AppLanguage) -> Unit,
-    onGoToHomeClick: () -> Unit
+    currentTheme: AppTheme = AppTheme.LIGHT,
+    currentLanguage: AppLanguage = AppLanguage.ENGLISH,
+    onThemeSelect: (AppTheme) -> Unit = {},
+    onLanguageSelect: (AppLanguage) -> Unit = {},
+    onGoToHomeClick: () -> Unit = {}
 ) {
     var isThemeDropdownExpanded by remember { mutableStateOf(false) }
     var isLanguageDropdownExpanded by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
-            .fillMaxWidth(0.75f)
             .fillMaxHeight()
+            .fillMaxWidth(0.78f)
             .background(MaterialTheme.colorScheme.background)
     ) {
         // Drawer Header Box matching Figma
@@ -98,14 +101,19 @@ fun DrawerContent(
         )
 
         // Interactive Theme Selector Dropdown
-        Box {
+        ExposedDropdownMenuBox(
+            expanded = isThemeDropdownExpanded,
+            onExpandedChange = { isThemeDropdownExpanded = it },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             DrawerDropdownRow(
                 icon = Icons.Default.Build,
                 title = stringResource(id = R.string.theme),
                 selectedValue = currentTheme.displayName,
-                onClick = { isThemeDropdownExpanded = true }
+                onClick = { isThemeDropdownExpanded = !isThemeDropdownExpanded },
+                anchorModifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = false)
             )
-            DropdownMenu(
+            ExposedDropdownMenu(
                 expanded = isThemeDropdownExpanded,
                 onDismissRequest = { isThemeDropdownExpanded = false },
                 modifier = Modifier.background(MaterialTheme.colorScheme.surface)
@@ -134,14 +142,19 @@ fun DrawerContent(
         )
 
         // Interactive Language Selector Dropdown
-        Box {
+        ExposedDropdownMenuBox(
+            expanded = isLanguageDropdownExpanded,
+            onExpandedChange = { isLanguageDropdownExpanded = it },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             DrawerDropdownRow(
                 icon = Icons.Default.Info,
                 title = stringResource(id = R.string.language),
                 selectedValue = currentLanguage.displayName,
-                onClick = { isLanguageDropdownExpanded = true }
+                onClick = { isLanguageDropdownExpanded = !isLanguageDropdownExpanded },
+                anchorModifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = false)
             )
-            DropdownMenu(
+            ExposedDropdownMenu(
                 expanded = isLanguageDropdownExpanded,
                 onDismissRequest = { isLanguageDropdownExpanded = false },
                 modifier = Modifier.background(MaterialTheme.colorScheme.surface)
@@ -198,7 +211,8 @@ fun DrawerDropdownRow(
     icon: ImageVector,
     title: String,
     selectedValue: String,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    anchorModifier: Modifier = Modifier
 ) {
     Column(
         modifier = Modifier
@@ -225,6 +239,7 @@ fun DrawerDropdownRow(
 
         // Visual Dropdown Box Container matching Figma
         Card(
+            onClick = onClick,
             shape = DailyNewsShapes.medium,
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.background
@@ -233,7 +248,7 @@ fun DrawerDropdownRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 40.dp)
-                .clickable { onClick() }
+                .then(anchorModifier)
         ) {
             Row(
                 modifier = Modifier
@@ -255,4 +270,10 @@ fun DrawerDropdownRow(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DrawerContentPreview() {
+    DrawerContent()
 }

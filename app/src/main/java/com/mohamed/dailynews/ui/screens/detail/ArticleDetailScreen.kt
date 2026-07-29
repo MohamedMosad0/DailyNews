@@ -29,6 +29,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +49,9 @@ import com.bumptech.glide.integration.compose.placeholder
 import com.mohamed.dailynews.R
 import com.mohamed.dailynews.ui.screens.SharedArticleViewModel
 import com.mohamed.dailynews.ui.theme.DailyNewsShapes
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
@@ -55,23 +61,33 @@ fun ArticleDetailScreen(
 ) {
     val article by sharedViewModel.selectedArticle.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    var navigatingBack by remember { mutableStateOf(false) }
+
+    val cleanSourceTitle = article?.sourceName?.trim()?.takeIf {
+        it.isNotEmpty() && !it.equals("null", ignoreCase = true) && !it.equals("unknown", ignoreCase = true)
+    } ?: stringResource(R.string.app_name)
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { 
+                        if (!navigatingBack) {
+                            navigatingBack = true
+                            navController.popBackStack()
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(id = R.string.cd_back),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 title = {
                     Text(
-                        text = article?.sourceName ?: stringResource(R.string.app_name),
+                        text = cleanSourceTitle,
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -99,6 +115,10 @@ fun ArticleDetailScreen(
             val currentArticle = article!!
             val scrollState = rememberScrollState()
 
+            val authorText = formatAuthorText(currentArticle.author, currentArticle.sourceName)
+            val publishedDateText = formatPublishedAtDate(currentArticle.publishedAt)
+            val bodyContentText = cleanContentText(currentArticle.content, currentArticle.description)
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -112,6 +132,7 @@ fun ArticleDetailScreen(
                     model = currentArticle.urlToImage,
                     contentDescription = currentArticle.title,
                     contentScale = ContentScale.Crop,
+                    requestBuilderTransform = { it.timeout(30000) },
                     modifier = Modifier
                         .height(230.dp)
                         .fillMaxWidth()
@@ -127,7 +148,8 @@ fun ArticleDetailScreen(
                     text = currentArticle.title ?: "",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontSize = 22.sp,
-                        lineHeight = 28.sp
+                        lineHeight = 30.sp,
+                        fontWeight = FontWeight.Bold
                     ),
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -140,17 +162,14 @@ fun ArticleDetailScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = stringResource(
-                            id = R.string.by_author,
-                            currentArticle.author ?: currentArticle.sourceName ?: stringResource(id = R.string.unknown)
-                        ),
+                        text = authorText,
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.weight(1f, fill = false)
                     )
 
                     Text(
-                        text = currentArticle.publishedAt ?: "",
+                        text = publishedDateText,
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.secondary
                     )
@@ -159,10 +178,8 @@ fun ArticleDetailScreen(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 // Article Content Body
-                val bodyText = currentArticle.content ?: currentArticle.description ?: ""
-
                 Text(
-                    text = bodyText,
+                    text = bodyContentText,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         lineHeight = 24.sp,
                         fontWeight = FontWeight.Normal
@@ -190,14 +207,14 @@ fun ArticleDetailScreen(
                         .fillMaxWidth()
                         .height(50.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ArrowForward,
-                        contentDescription = null,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
                     Text(
                         text = stringResource(id = R.string.read_full_on_web),
                         style = MaterialTheme.typography.bodyLarge
+                    )
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ArrowForward,
+                        contentDescription = null,
+                        modifier = Modifier.padding(start = 8.dp)
                     )
                 }
 
@@ -205,4 +222,39 @@ fun ArticleDetailScreen(
             }
         }
     }
+}
+
+private fun cleanContentText(content: String?, description: String?): String {
+    val rawText = content?.takeIf { it.isNotBlank() } ?: description ?: ""
+    return rawText.replace(Regex("""\s*\[\+\d+\s*chars\]""", RegexOption.IGNORE_CASE), "").trim()
+}
+
+private fun formatPublishedAtDate(rawDate: String?): String {
+    if (rawDate.isNullOrBlank()) return ""
+    return try {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
+        val parsedDate = inputFormat.parse(rawDate)
+        if (parsedDate != null) {
+            val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            outputFormat.format(parsedDate)
+        } else {
+            rawDate.split("T").firstOrNull() ?: rawDate
+        }
+    } catch (e: Exception) {
+        rawDate.split("T").firstOrNull() ?: rawDate
+    }
+}
+
+@Composable
+private fun formatAuthorText(author: String?, sourceName: String?): String {
+    val cleanAuthor = author?.trim()?.takeIf {
+        it.isNotEmpty() && !it.equals("null", ignoreCase = true) && !it.equals("unknown", ignoreCase = true)
+    }
+    val cleanSource = sourceName?.trim()?.takeIf {
+        it.isNotEmpty() && !it.equals("null", ignoreCase = true) && !it.equals("unknown", ignoreCase = true)
+    }
+    val displayAuthor = cleanAuthor ?: cleanSource
+    return if (!displayAuthor.isNullOrEmpty()) stringResource(R.string.by_author, displayAuthor) else ""
 }

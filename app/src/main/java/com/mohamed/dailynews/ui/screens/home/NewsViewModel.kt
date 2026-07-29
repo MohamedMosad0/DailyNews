@@ -8,6 +8,7 @@ import com.mohamed.dailynews.domain.model.Source
 import com.mohamed.dailynews.domain.usecase.GetArticlesUseCase
 import com.mohamed.dailynews.domain.usecase.GetSourcesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,6 +33,7 @@ class NewsViewModel @Inject constructor(
                 tabs.value = getSourcesUseCase.execute(category = category)
                 isLoading.value = false
             } catch (t: Throwable) {
+                if (t is CancellationException) throw t
                 isLoading.value = false
                 Timber.tag("getSources - onFailure").e("code = ${t.message}")
                 errorMessage.value = t.message ?: "Something went wrong please try again later"
@@ -47,6 +49,7 @@ class NewsViewModel @Inject constructor(
                 isLoadingArticles.value = false
                 articles.value = result
             } catch (t: Throwable) {
+                if (t is CancellationException) throw t
                 Timber.tag("getArticles - onFailure").e("body = $t")
                 isLoadingArticles.value = false
                 articlesErrorMessage.value =

@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,15 +42,20 @@ class SettingsViewModel @Inject constructor(
 
     fun setTheme(newTheme: AppTheme) {
         viewModelScope.launch {
+            Timber.d("SettingsViewModel: setTheme -> $newTheme")
             setThemeUseCase.execute(newTheme)
         }
     }
 
-    fun setLanguage(newLanguage: AppLanguage) {
+    fun setLanguage(newLanguage: AppLanguage, onComplete: () -> Unit = {}) {
         viewModelScope.launch {
+            Timber.d("SettingsViewModel: setLanguage -> $newLanguage (code='${newLanguage.code}')")
             setLanguageUseCase.execute(newLanguage)
             val appLocales = LocaleListCompat.forLanguageTags(newLanguage.code)
+            Timber.d("SettingsViewModel: Calling AppCompatDelegate.setApplicationLocales($appLocales)")
             AppCompatDelegate.setApplicationLocales(appLocales)
+            Timber.d("SettingsViewModel: Language update complete. Invoking onComplete callback.")
+            onComplete()
         }
     }
 }

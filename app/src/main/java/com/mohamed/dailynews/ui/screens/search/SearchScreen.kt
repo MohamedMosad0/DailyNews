@@ -1,11 +1,14 @@
 package com.mohamed.dailynews.ui.screens.search
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,12 +29,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -58,19 +64,30 @@ fun SearchScreen(
     val query by viewModel.searchQuery.collectAsStateWithLifecycle()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     val selectedArticle by sharedViewModel.selectedArticle.collectAsStateWithLifecycle()
     var showBottomSheet by remember { mutableStateOf(false) }
+    var navigatingBack by remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { 
+                        if (!navigatingBack) {
+                            navigatingBack = true
+                            navController.popBackStack()
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(id = R.string.cd_back),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
@@ -98,7 +115,7 @@ fun SearchScreen(
                                 IconButton(onClick = { viewModel.clearQuery() }) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
-                                        contentDescription = "Clear",
+                                        contentDescription = stringResource(id = R.string.cd_clear),
                                         tint = MaterialTheme.colorScheme.onBackground
                                     )
                                 }
@@ -119,6 +136,7 @@ fun SearchScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(end = 12.dp)
+                            .focusRequester(focusRequester)
                     )
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -135,14 +153,29 @@ fun SearchScreen(
         ) {
             when (val state = uiState) {
                 is SearchUiState.Initial -> {
-                    Box(
+                    Column(
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(64.dp)
+                                .padding(bottom = 16.dp),
+                            tint = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f)
+                        )
+                        Text(
+                            text = stringResource(id = R.string.search_news),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                         Text(
                             text = stringResource(id = R.string.search_hint),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.secondary
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(top = 8.dp)
                         )
                     }
                 }
@@ -152,14 +185,29 @@ fun SearchScreen(
                 }
 
                 is SearchUiState.Empty -> {
-                    Box(
+                    Column(
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(64.dp)
+                                .padding(bottom = 16.dp),
+                            tint = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f)
+                        )
+                        Text(
+                            text = stringResource(id = R.string.no_results_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                         Text(
                             text = stringResource(id = R.string.no_results, query),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.secondary
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(top = 8.dp)
                         )
                     }
                 }
@@ -172,9 +220,11 @@ fun SearchScreen(
 
                 is SearchUiState.Success -> {
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        items(state.articles) { article ->
+                        items(state.articles, key = { article -> article.url ?: article.hashCode() }) { article ->
                             ArticleItem(
                                 article = article,
                                 onClick = {

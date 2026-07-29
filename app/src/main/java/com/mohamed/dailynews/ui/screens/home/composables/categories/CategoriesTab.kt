@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,7 +57,7 @@ fun CategoriesTab(onCategoryClick: (Category) -> Unit) {
                 modifier = Modifier.padding(bottom = 16.dp, top = 8.dp)
             )
         }
-        itemsIndexed(categories) { index, category ->
+        itemsIndexed(categories, key = { _, category -> category.id }) { index, category ->
             CategoryItem(category = category, index = index) {
                 onCategoryClick(category)
             }
@@ -83,8 +83,9 @@ fun CategoryItem(category: Category, index: Int, onClick: () -> Unit) {
     ) {
         Image(
             painter = painterResource(category.image),
-            contentDescription = category.title,
+            contentDescription = stringResource(id = category.titleResId),
             contentScale = ContentScale.Crop,
+            alignment = if (isEven) Alignment.CenterStart else Alignment.CenterEnd,
             modifier = Modifier.fillMaxSize()
         )
 
@@ -93,10 +94,10 @@ fun CategoryItem(category: Category, index: Int, onClick: () -> Unit) {
                 .fillMaxSize()
                 .padding(18.dp),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = if (isEven) Alignment.End else Alignment.Start
+            horizontalAlignment = if (isEven) AbsoluteAlignment.Right else AbsoluteAlignment.Left
         ) {
             Text(
-                text = category.title,
+                text = stringResource(id = category.titleResId),
                 style = MaterialTheme.typography.titleMedium,
                 color = White
             )
@@ -110,35 +111,20 @@ fun CategoryItem(category: Category, index: Int, onClick: () -> Unit) {
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
                 ) {
-                    if (isEven) {
-                        Text(
-                            text = stringResource(id = R.string.view_all),
-                            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
-                            color = Black
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-                            contentDescription = stringResource(id = R.string.view_all),
-                            tint = Black,
-                            modifier = iconModifier
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                            contentDescription = stringResource(id = R.string.view_all),
-                            tint = Black,
-                            modifier = iconModifier
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(id = R.string.view_all),
-                            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
-                            color = Black
-                        )
-                    }
+                    Text(
+                        text = stringResource(id = R.string.view_all),
+                        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
+                        color = Black
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                        contentDescription = stringResource(id = R.string.view_all),
+                        tint = Black,
+                        modifier = iconModifier
+                    )
                 }
             }
         }

@@ -39,7 +39,7 @@ class UserPreferencesRepositoryImpl @Inject constructor(
 
     override fun getLanguage(): Flow<AppLanguage> {
         return dataStore.data.map { preferences ->
-            val code = preferences[PreferencesKeys.APP_LANGUAGE] ?: AppLanguage.ENGLISH.code
+            val code = preferences[PreferencesKeys.APP_LANGUAGE] ?: java.util.Locale.getDefault().language
             AppLanguage.fromCode(code)
         }
     }

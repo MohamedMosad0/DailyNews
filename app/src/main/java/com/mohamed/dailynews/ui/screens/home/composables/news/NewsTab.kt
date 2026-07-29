@@ -43,8 +43,8 @@ fun NewsTab(
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-    LaunchedEffect(category) {
-        onLoadSources(category.title)
+    LaunchedEffect(category.id) {
+        onLoadSources(category.id)
     }
 
     Column(
@@ -117,7 +117,7 @@ fun NewsTab(
 
         if (sourcesErrorMessage?.isNotEmpty() == true) {
             DefaultErrorMessage(sourcesErrorMessage) {
-                onLoadSources(category.title)
+                onLoadSources(category.id)
             }
         }
     }

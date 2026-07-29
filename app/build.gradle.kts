@@ -18,8 +18,11 @@ android {
     if (localPropertiesFile.exists()) {
         localProperties.load(localPropertiesFile.inputStream())
     }
-    val mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: ""
-    val newsApiKey = localProperties.getProperty("NEWS_API_KEY", "")
+    val newsApiKey = localProperties.getProperty("NEWS_API_KEY") ?: ""
+
+    if (newsApiKey.isBlank()) {
+        throw GradleException("NEWS_API_KEY is missing from local.properties. Please define NEWS_API_KEY in local.properties.")
+    }
 
     defaultConfig {
         applicationId = "com.mohamed.dailynews"
@@ -30,7 +33,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
         buildConfigField("String", "NEWS_API_KEY", "\"$newsApiKey\"")
     }
 
@@ -67,13 +69,14 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.compose.runtime.livedata)
-    implementation(libs.play.services.location)
     val nav_version = "2.8.5"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
-    implementation("io.coil-kt.coil3:coil-compose:3.2.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("com.github.bumptech.glide:compose:1.0.0-beta08")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     val lifecycle_version = "2.10.0"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle_version}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${lifecycle_version}")
@@ -88,8 +91,6 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation("androidx.datastore:datastore-preferences:1.1.2")
     implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.accompanist:accompanist-permissions:0.37.3")
-    implementation("com.google.maps.android:maps-compose:6.7.1")
     implementation(libs.timber)
 
     testImplementation(libs.junit)

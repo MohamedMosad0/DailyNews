@@ -52,6 +52,7 @@ fun ArticlePreviewBottomSheet(
                 model = article.urlToImage,
                 contentDescription = article.title,
                 contentScale = ContentScale.Crop,
+                requestBuilderTransform = { it.timeout(30000) },
                 modifier = Modifier
                     .height(200.dp)
                     .fillMaxWidth()

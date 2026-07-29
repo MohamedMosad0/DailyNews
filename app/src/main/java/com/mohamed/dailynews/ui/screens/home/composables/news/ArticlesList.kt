@@ -68,7 +68,7 @@ fun ArticlesList(
 
         if (articles != null) {
             if (articles.isNotEmpty()) {
-                items(articles) { article ->
+                items(articles, key = { article -> article.url ?: article.hashCode() }) { article ->
                     ArticleItem(article = article, onClick = { onArticleClick(article) })
                 }
             } else {
@@ -112,6 +112,7 @@ fun ArticleItem(article: Article, onClick: () -> Unit = {}) {
                 model = article.urlToImage,
                 contentDescription = article.title,
                 contentScale = ContentScale.Crop,
+                requestBuilderTransform = { it.timeout(30000) },
                 modifier = Modifier
                     .height(190.dp)
                     .fillMaxWidth()

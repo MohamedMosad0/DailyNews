@@ -9,12 +9,7 @@ data object HomeRoute
 data object SplashRoute
 
 @Serializable
-data object MapRoute
-
-@Serializable
 data object SearchRoute
 
 @Serializable
 data object ArticleDetailRoute
-
-

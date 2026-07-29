@@ -1,16 +1,26 @@
 <resources>
-    <string name="app_name">ديلي نيوز</string>
+    <string name="app_name">اخبار اليوم</string>
     <string name="tagline">قصص عالمية. تغطية في الوقت الحقيقي.</string>
-    <string name="daily_wordmark">ديلي</string>
-    <string name="news_wordmark">نيوز</string>
-    <string name="portfolio_footer">محفظة ديلي نيوز</string>
+    <string name="daily_wordmark"> اخبارك</string>
+    <string name="news_wordmark"> تهمنا </string>
+    <string name="portfolio_footer">Portfolio DailyNews</string>
     <string name="greeting_headline">صباح الخير\nإليك بعض الأخبار لك</string>
     <string name="view_all">عرض الكل</string>
 
     <!-- Drawer -->
+    <string name="home">الرئيسية</string>
     <string name="go_to_home">الذهاب إلى الرئيسية</string>
     <string name="theme">المظهر</string>
     <string name="language">اللغة</string>
+
+    <!-- Categories -->
+    <string name="category_general">عام</string>
+    <string name="category_business">أعمال</string>
+    <string name="category_sports">رياضة</string>
+    <string name="category_technology">تكنولوجيا</string>
+    <string name="category_science">علوم</string>
+    <string name="category_health">صحة</string>
+    <string name="category_entertainment">ترفيه</string>
 
     <!-- News -->
     <string name="no_sources">لا توجد مصادر متاحة لهذه الفئة</string>
@@ -23,17 +33,13 @@
     <!-- Search -->
     <string name="search_news">البحث عن الأخبار...</string>
     <string name="search_hint">اكتب 3 أحرف على الأقل للبحث</string>
+    <string name="no_results_title">لا توجد نتائج</string>
     <string name="no_results">لم يتم العثور على مقالات تطابق \"%s\"</string>
-
-    <!-- Maps -->
-    <string name="gps_disabled">نظام تحديد المواقع معطل</string>
-    <string name="location_permission_rationale">أحتاج إلى إذنك لإظهار موقعك على الخرائط</string>
-    <string name="request">طلب</string>
-    <string name="location_permission_denied">للوصول إلى موقعك ، يرجى منح الإذن من الإعدادات</string>
-    <string name="open_settings">افتح الإعدادات</string>
-    <string name="refresh_status">تحديث الحالة</string>
-    <string name="location_permission_required">مطلوب إذن الموقع لإظهار موقعك على الخريطة.</string>
-    <string name="grant_permission">منح الإذن</string>
-    <string name="your_location">موقعك</string>
     <string name="no_article_selected">لم يتم اختيار مقال</string>
+
+    <!-- Accessibility Content Descriptions -->
+    <string name="cd_back">رجوع</string>
+    <string name="cd_clear">مسح</string>
+    <string name="cd_open_drawer">فتح القائمة</string>
+    <string name="cd_search">بحث</string>
 </resources>

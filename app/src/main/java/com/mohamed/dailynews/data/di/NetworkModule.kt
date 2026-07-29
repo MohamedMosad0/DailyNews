@@ -1,16 +1,67 @@
 package com.mohamed.dailynews.data.di
 
+import com.mohamed.dailynews.BuildConfig
 import com.mohamed.dailynews.data.api.WebServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    @Provides
+    fun provideApiKeyInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val apiKey = BuildConfig.NEWS_API_KEY
+            val maskedKey = if (apiKey.length >= 8) {
+                "${apiKey.take(4)}********${apiKey.takeLast(4)}"
+            } else {
+                "EMPTY_OR_SHORT($apiKey)"
+            }
+            Timber.d("ApiKeyInterceptor: BuildConfig.NEWS_API_KEY is empty=${apiKey.isEmpty()}, length=${apiKey.length}, maskedValue='$maskedKey'")
+            val originalRequest = chain.request()
+            val urlWithApiKey = originalRequest.url.newBuilder()
+                .addQueryParameter("apiKey", apiKey)
+                .build()
+            Timber.d("ApiKeyInterceptor: Final Request URL = '$urlWithApiKey'")
+            val newRequest = originalRequest.newBuilder()
+                .url(urlWithApiKey)
+                .build()
+            chain.proceed(newRequest)
+        }
+    }
+
+    @Provides
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor { message ->
+            Timber.d("RetrofitOkHttp: $message")
+        }.apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
+        }
+    }
+
+    @Provides
+    fun provideOkHttpClient(
+        apiKeyInterceptor: Interceptor,
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(apiKeyInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
 
     @Provides
     fun provideConverterFactory(): GsonConverterFactory {
@@ -18,9 +69,13 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideRetrofit(gsonConverterFactory: GsonConverterFactory): Retrofit {
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://newsapi.org")
+            .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
     }

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 
 sealed interface SearchUiState {
@@ -49,13 +50,17 @@ class SearchViewModel @Inject constructor(
                 } else {
                     emit(SearchUiState.Loading)
                     try {
+                        timber.log.Timber.tag("SearchViewModel").d("Executing searchArticlesUseCase with query='$trimmed'")
                         val articles = searchArticlesUseCase.execute(query = trimmed)
+                        timber.log.Timber.tag("SearchViewModel").d("Search succeeded with ${articles.size} articles")
                         if (articles.isEmpty()) {
                             emit(SearchUiState.Empty)
                         } else {
                             emit(SearchUiState.Success(articles))
                         }
                     } catch (t: Throwable) {
+                        if (t is CancellationException) throw t
+                        timber.log.Timber.tag("SearchViewModel").e(t, "Search failed for query='$trimmed' with exception: ${t.message}")
                         emit(SearchUiState.Error(t.message ?: "Failed to perform search. Please try again."))
                     }
                 }

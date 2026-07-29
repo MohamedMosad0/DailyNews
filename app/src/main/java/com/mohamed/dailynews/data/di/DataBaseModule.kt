@@ -16,7 +16,7 @@ object DataBaseModule {
 
     @Provides
     fun provideMyDatabase(@ApplicationContext context: Context): MyDatabase {
-        return Room.databaseBuilder(context, MyDatabase::class.java, "todo-db")
+        return Room.databaseBuilder(context, MyDatabase::class.java, "daily_news.db")
             .fallbackToDestructiveMigration()
             .build()
     }

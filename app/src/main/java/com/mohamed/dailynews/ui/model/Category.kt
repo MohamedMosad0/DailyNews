@@ -1,19 +1,20 @@
 package com.mohamed.dailynews.ui.model
 
+import androidx.annotation.StringRes
 import com.mohamed.dailynews.R
 
-
 data class Category(
+    val id: String,
     val image: Int,
-    val title: String,
+    @StringRes val titleResId: Int,
 )
 
 val categories = listOf(
-    Category(image = R.drawable.general_dark, title = "General"),
-    Category(image = R.drawable.business_dark, title = "Business"),
-    Category(image = R.drawable.sport_dark, title = "Sports"),
-    Category(image = R.drawable.technology_dark, title = "Technology"),
-    Category(image = R.drawable.science_dark, title = "Science"),
-    Category(image = R.drawable.health_dark, title = "Health"),
-    Category(image = R.drawable.entertainment_dark, title = "Entertainment"),
+    Category(id = "general", image = R.drawable.general_dark, titleResId = R.string.category_general),
+    Category(id = "business", image = R.drawable.business_dark, titleResId = R.string.category_business),
+    Category(id = "sports", image = R.drawable.sport_dark, titleResId = R.string.category_sports),
+    Category(id = "technology", image = R.drawable.technology_dark, titleResId = R.string.category_technology),
+    Category(id = "science", image = R.drawable.science_dark, titleResId = R.string.category_science),
+    Category(id = "health", image = R.drawable.health_dark, titleResId = R.string.category_health),
+    Category(id = "entertainment", image = R.drawable.entertainment_dark, titleResId = R.string.category_entertainment),
 )
