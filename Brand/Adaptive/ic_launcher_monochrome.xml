@@ -13,24 +13,13 @@
             android:strokeWidth="8"
             android:strokeColor="#FFFFFF"/>
         <path
-            android:pathData="M100,26 C120,50 120,150 100,174 C80,150 80,50 100,26 Z"
-            android:strokeWidth="5"
-            android:strokeColor="#FFFFFF"/>
-        <path
-            android:pathData="M32,70 Q100,85 168,70 M32,130 Q100,115 168,130"
-            android:strokeWidth="5"
-            android:strokeColor="#FFFFFF"/>
-        <path
-            android:pathData="M152,48 m-13,0 a13,13 0 1,0 26,0 a13,13 0 1,0 -26,0"
-            android:fillColor="#E53935"/>
-        <path
             android:pathData="M62,92 h76 v66 h-76 z"
-            android:fillColor="#121212"
+            android:fillColor="#000000"
             android:strokeWidth="7"
             android:strokeColor="#FFFFFF"/>
         <path
             android:pathData="M72,103 h22 v18 h-22 z"
-            android:fillColor="#E53935"/>
+            android:fillColor="#FFFFFF"/>
         <path
             android:pathData="M99,106 h28 M99,116 h22 M72,129 h55 M72,138 h46 M72,147 h38"
             android:strokeWidth="4"

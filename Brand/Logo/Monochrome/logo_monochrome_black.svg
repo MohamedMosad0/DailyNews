@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&amp;display=swap');
+    .title-daily { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 46px; fill: #000000; }
+    .title-news { font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 46px; fill: #000000; }
+    .tagline { font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 12px; fill: #000000; letter-spacing: 5px; }
+  </style>
+  <rect width="500" height="500" fill="#FFFFFF"/>
+  <g transform="translate(150, 45)">
+    <g id="icon-mark-mono-blk">
+  <defs>
+    <mask id="red-dot-cutout-mono-blk">
+      <rect x="0" y="0" width="200" height="200" fill="#ffffff" />
+      <circle cx="152" cy="48" r="18" fill="#000000" />
+    </mask>
+    <linearGradient id="redDotGrad-mono-blk" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5252"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+  </defs>
+  <g mask="url(#red-dot-cutout-mono-blk)" color="#000000">
+    <circle cx="100" cy="100" r="74" fill="none" stroke="currentColor" stroke-width="8" />
+    <ellipse cx="100" cy="100" rx="36" ry="74" fill="none" stroke="currentColor" stroke-width="5" opacity="0.8" />
+    <line x1="100" y1="26" x2="100" y2="174" stroke="currentColor" stroke-width="5" opacity="0.7" />
+    <path d="M 32 70 Q 100 85 168 70" fill="none" stroke="currentColor" stroke-width="5" opacity="0.8" />
+    <path d="M 32 130 Q 100 115 168 130" fill="none" stroke="currentColor" stroke-width="5" opacity="0.8" />
+  </g>
+  <circle cx="152" cy="48" r="13" fill="url(#redDotGrad-mono-blk)" />
+  <rect x="62" y="92" width="76" height="66" rx="8" fill="#FFFFFF" stroke="#000000" stroke-width="7" />
+  <rect x="72" y="103" width="22" height="18" rx="3" fill="#000000" />
+  <rect x="99" y="104" width="28" height="5" rx="2.5" fill="#000000" />
+  <rect x="99" y="114" width="22" height="4" rx="2" fill="#000000" opacity="0.75" />
+  <rect x="72" y="127" width="55" height="4.5" rx="2" fill="#000000" opacity="0.9" />
+  <rect x="72" y="136" width="46" height="4.5" rx="2" fill="#000000" opacity="0.7" />
+  <rect x="72" y="145" width="38" height="4" rx="2" fill="#000000" opacity="0.5" />
+</g>
+  </g>
+  <text x="250" y="305" text-anchor="middle">
+    <tspan class="title-daily">Daily</tspan><tspan class="title-news">News</tspan>
+  </text>
+  <text x="250" y="345" text-anchor="middle" class="tagline">WORLD NEWS, REAL TIME</text>
+</svg>

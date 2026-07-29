@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#121212"/>
+  <rect x="102" y="102" width="820" height="820" rx="180" fill="#1E1E1E" stroke="#333333" stroke-width="4"/>
+  <g transform="translate(262, 262) scale(2.5)">
+    <g id="icon-mark-ps-1024">
+  <defs>
+    <mask id="red-dot-cutout-ps-1024">
+      <rect x="0" y="0" width="200" height="200" fill="#ffffff" />
+      <circle cx="152" cy="48" r="18" fill="#000000" />
+    </mask>
+    <linearGradient id="redDotGrad-ps-1024" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5252"/>
+      <stop offset="100%" stop-color="#E53935"/>
+    </linearGradient>
+  </defs>
+  <g mask="url(#red-dot-cutout-ps-1024)" color="#FFFFFF">
+    <circle cx="100" cy="100" r="74" fill="none" stroke="currentColor" stroke-width="8" />
+    <ellipse cx="100" cy="100" rx="36" ry="74" fill="none" stroke="currentColor" stroke-width="5" opacity="0.8" />
+    <line x1="100" y1="26" x2="100" y2="174" stroke="currentColor" stroke-width="5" opacity="0.7" />
+    <path d="M 32 70 Q 100 85 168 70" fill="none" stroke="currentColor" stroke-width="5" opacity="0.8" />
+    <path d="M 32 130 Q 100 115 168 130" fill="none" stroke="currentColor" stroke-width="5" opacity="0.8" />
+  </g>
+  <circle cx="152" cy="48" r="13" fill="url(#redDotGrad-ps-1024)" />
+  <rect x="62" y="92" width="76" height="66" rx="8" fill="#1E1E1E" stroke="#FFFFFF" stroke-width="7" />
+  <rect x="72" y="103" width="22" height="18" rx="3" fill="#E53935" />
+  <rect x="99" y="104" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+  <rect x="99" y="114" width="22" height="4" rx="2" fill="#FFFFFF" opacity="0.75" />
+  <rect x="72" y="127" width="55" height="4.5" rx="2" fill="#FFFFFF" opacity="0.9" />
+  <rect x="72" y="136" width="46" height="4.5" rx="2" fill="#FFFFFF" opacity="0.7" />
+  <rect x="72" y="145" width="38" height="4" rx="2" fill="#FFFFFF" opacity="0.5" />
+</g>
+  </g>
+</svg>

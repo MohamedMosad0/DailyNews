@@ -1,0 +1,38 @@
+{
+    "version":  "1.0.0",
+    "name":  "DailyNews Master Brand Package",
+    "colorPalette":  {
+                         "mutedGrey":  "#9E9E9E",
+                         "darkBackground":  "#121212",
+                         "white":  "#FFFFFF",
+                         "darkSurface":  "#1E1E1E",
+                         "primaryRed":  "#E53935"
+                     },
+    "alignment":  "Zero Overlap Precision Alignment",
+    "typography":  {
+                       "fontFamily":  "Poppins",
+                       "weights":  [
+                                       "Bold 800",
+                                       "SemiBold 600",
+                                       "Medium 500",
+                                       "Regular 400",
+                                       "Light 300"
+                                   ]
+                   },
+    "assets":  [
+                   "Logo/Primary/logo_primary_dark.svg",
+                   "Logo/Primary/logo_primary_light.svg",
+                   "Logo/Horizontal/logo_horizontal_dark.svg",
+                   "Logo/Horizontal/logo_horizontal_light.svg",
+                   "Logo/Vertical/logo_vertical_dark.svg",
+                   "Logo/Vertical/logo_vertical_light.svg",
+                   "Logo/IconOnly/logo_icon_dark.svg",
+                   "Logo/Monochrome/logo_monochrome_white.svg",
+                   "Adaptive/ic_launcher_foreground.xml",
+                   "Icons/playstore_icon.svg",
+                   "Splash/splash_screen_dark.svg",
+                   "Banner/github_banner_1500x500.svg",
+                   "README/readme_cover_1200x630.svg"
+               ],
+    "format":  "Figma Vector Schema"
+}
