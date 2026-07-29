@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">ديلي نيوز</string>
+    <string name="tagline">قصص عالمية. تغطية في الوقت الحقيقي.</string>
+    <string name="daily_wordmark">ديلي</string>
+    <string name="news_wordmark">نيوز</string>
+    <string name="portfolio_footer">محفظة ديلي نيوز</string>
+    <string name="greeting_headline">صباح الخير\nإليك بعض الأخبار لك</string>
+    <string name="view_all">عرض الكل</string>
+
+    <!-- Drawer -->
+    <string name="go_to_home">الذهاب إلى الرئيسية</string>
+    <string name="theme">المظهر</string>
+    <string name="language">اللغة</string>
+
+    <!-- News -->
+    <string name="no_sources">لا توجد مصادر متاحة لهذه الفئة</string>
+    <string name="no_articles">لا توجد مقالات في هذا المصدر</string>
+    <string name="view_full_article">عرض المقال كاملاً</string>
+    <string name="read_full_on_web">اقرأ المقال كاملاً على الويب</string>
+    <string name="by_author">بواسطة %s</string>
+    <string name="unknown">غير معروف</string>
+
+    <!-- Search -->
+    <string name="search_news">البحث عن الأخبار...</string>
+    <string name="search_hint">اكتب 3 أحرف على الأقل للبحث</string>
+    <string name="no_results">لم يتم العثور على مقالات تطابق \"%s\"</string>
+
+    <!-- Maps -->
+    <string name="gps_disabled">نظام تحديد المواقع معطل</string>
+    <string name="location_permission_rationale">أحتاج إلى إذنك لإظهار موقعك على الخرائط</string>
+    <string name="request">طلب</string>
+    <string name="location_permission_denied">للوصول إلى موقعك ، يرجى منح الإذن من الإعدادات</string>
+    <string name="open_settings">افتح الإعدادات</string>
+    <string name="refresh_status">تحديث الحالة</string>
+    <string name="location_permission_required">مطلوب إذن الموقع لإظهار موقعك على الخريطة.</string>
+    <string name="grant_permission">منح الإذن</string>
+    <string name="your_location">موقعك</string>
+    <string name="no_article_selected">لم يتم اختيار مقال</string>
+</resources>

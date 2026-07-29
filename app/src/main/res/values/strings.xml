@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">DailyNews</string>
+    <string name="tagline">Global Stories. Real-Time Coverage.</string>
+    <string name="daily_wordmark">Daily</string>
+    <string name="news_wordmark">News</string>
+    <string name="portfolio_footer">DailyNews Portfolio</string>
+    <string name="greeting_headline">Good Morning\nHere is Some News For You</string>
+    <string name="view_all">View All</string>
+
+    <!-- Drawer -->
+    <string name="go_to_home">Go To Home</string>
+    <string name="theme">Theme</string>
+    <string name="language">Language</string>
+
+    <!-- News -->
+    <string name="no_sources">No sources available for this category</string>
+    <string name="no_articles">No articles in this source</string>
+    <string name="view_full_article">View Full Article</string>
+    <string name="read_full_on_web">Read Full Article on Web</string>
+    <string name="by_author">By %s</string>
+    <string name="unknown">Unknown</string>
+
+    <!-- Search -->
+    <string name="search_news">Search news...</string>
+    <string name="search_hint">Type at least 3 characters to search</string>
+    <string name="no_results">No articles found matching \"%s\"</string>
+
+    <!-- Maps -->
+    <string name="gps_disabled">GPS is Disabled</string>
+    <string name="location_permission_rationale">I need your permission to show your location on maps</string>
+    <string name="request">Request</string>
+    <string name="location_permission_denied">To access your location please grant the permission from settings</string>
+    <string name="open_settings">Open settings</string>
+    <string name="refresh_status">Refresh Status</string>
+    <string name="location_permission_required">Location permission is required to show your location on the map.</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="your_location">Your Location</string>
+    <string name="no_article_selected">No article selected</string>
+</resources>
