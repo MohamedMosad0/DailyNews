@@ -2,51 +2,167 @@
 
 ![DailyNews GitHub Banner](Brand/Banner/github_banner_1500x500.png)
 
-# DailyNews — Global Real-Time News
+# DailyNews
 
-<p align="center">
-  <img src="Brand/Logo/Horizontal/logo_horizontal_dark.png" alt="DailyNews Logo" width="450"/>
-</p>
+### Modern Android News App built with Jetpack Compose
 
-**A modern, production-grade Android application delivering breaking world news in real-time.**  
-Built with **Jetpack Compose**, **Clean Architecture**, **MVVM**, **Hilt**, **Room**, **Coroutines & Flow**, and **Material Design 3**.
+DailyNews is a production-grade Android application engineered with Clean Architecture and MVVM patterns. It delivers real-time breaking world news across multiple categories with full offline caching, dynamic localization, and modern Material 3 styling.
 
----
-
-![README Cover](Brand/README/readme_cover_1200x630.png)
+[![Android](https://img.shields.io/badge/Platform-Android-3DDC84?style=flat-square&logo=android&logoColor=white)](https://developer.android.com)
+[![Kotlin](https://img.shields.io/badge/Language-Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
+[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20MVVM-FF6F00?style=flat-square)](https://developer.android.com/topic/architecture)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 </div>
 
-## 🚀 Features
+---
 
-- **Real-Time News Feed**: Browse top headlines across global news sources.
-- **Categorized News**: General, Business, Technology, Sports, Science, Health, and Entertainment.
-- **Full-Text Article Detail**: Detailed article view with author attribution and web browser link out.
-- **Instant Search**: Search through live news articles with debounced queries.
-- **Offline Cache**: Local caching powered by Room Database for offline reading.
-- **Theme & Localization**: Dark and Light themes with dynamic English & Arabic (RTL) localization support.
+## 📱 App Screenshots
+
+<table align="center">
+<tr>
+<td align="center">
+<img src="Brand/Screenshots/home.png" width="250" alt="Home Screen"/><br/>
+<strong>Home</strong>
+</td>
+
+<td align="center">
+<img src="Brand/Screenshots/search.png" width="250" alt="Search Screen"/><br/>
+<strong>Search</strong>
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<img src="Brand/Screenshots/article_details.png" width="250" alt="Article Details Screen"/><br/>
+<strong>Article Details</strong>
+</td>
+
+<td align="center">
+<img src="Brand/Screenshots/settings.png" width="250" alt="Settings Screen"/><br/>
+<strong>Settings</strong>
+</td>
+</tr>
+</table>
 
 ---
 
-## 🏗️ Architecture & Tech Stack
+## ✨ Features
 
-The app follows **Clean Architecture** principles separated into domain, data, and presentation layers:
+- 📰 Real-time news updates
+- 🔍 Instant article search
+- 📂 Category browsing
+- 💾 Offline caching with Room
+- 🌍 English & Arabic (RTL)
+- 🎨 Material 3 UI
+- ⚡ Kotlin Coroutines & Flow
+- 📱 Clean Architecture (MVVM)
 
-- **UI Framework**: [Jetpack Compose](https://developer.android.com/jetpack/compose) with Material Design 3
-- **Dependency Injection**: [Hilt](https://dagger.dev/hilt/)
-- **Local Persistence**: [Room Database](https://developer.android.com/training/data-storage/room) & [Preferences DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
-- **Networking**: [Retrofit 3](https://square.github.io/retrofit/) & [OkHttp 4](https://square.github.io/okhttp/)
-- **Image Loading**: [Glide Compose](https://github.com/bumptech/glide)
-- **Async & Reactive**: Kotlin Coroutines & `Flow`
+---
+
+## 🏛️ Architecture
+
+DailyNews follows Google's recommended **Clean Architecture** guidelines, separating code into distinct, testable layers:
+
+```mermaid
+graph TD
+    subgraph UI ["Presentation Layer (Jetpack Compose)"]
+        UI_Screens["Screens & Composables"] --> UI_ViewModels["ViewModels (StateFlow)"]
+    end
+
+    subgraph Domain ["Domain Layer (Business Logic)"]
+        UI_ViewModels --> Domain_UseCases["Use Cases / Repositories Interfaces"]
+        Domain_Models["Domain Models"]
+    end
+
+    subgraph Data ["Data Layer (Data Sources)"]
+        Domain_UseCases --> Data_RepoImpl["Repository Implementation"]
+        Data_RepoImpl --> Data_Local["Local Data Source (Room DB)"]
+        Data_RepoImpl --> Data_Remote["Remote Data Source (Retrofit API)"]
+    end
+```
+
+- **UI Layer**: Composable screens observed from `ViewModel` `StateFlow` states.
+- **Domain Layer**: Core business models and repository interfaces independent of Android framework code.
+- **Data Layer**: Coordinates local cache (Room) and remote REST endpoints (Retrofit) with automatic failover.
+
+---
+
+## 🛠️ Tech Stack & Libraries
+
+| Category | Library / Tool | Purpose |
+|---|---|---|
+| **UI** | Jetpack Compose & Material 3 | Declarative UI components and thematic styling |
+| **DI** | Hilt (Dagger) | Dependency injection container |
+| **Database** | Room | Local SQLite database persistence |
+| **Networking** | Retrofit 3 & OkHttp 4 | REST API HTTP client and interceptors |
+| **Async** | Kotlin Coroutines & Flow | Asynchronous streams and reactive state handling |
+| **Images** | Glide Compose | Asynchronous image loading and disk caching |
+| **Preferences**| Preferences DataStore | Lightweight key-value preferences |
+| **Logging** | Timber | Production-guarded debug logging |
+
+---
+
+## 📂 Project Structure
+
+```
+DailyNews/
+├── app/
+│   └── src/
+│       ├── main/
+│       │   ├── java/com/mohamed/dailynews/
+│       │   │   ├── data/
+│       │   │   │   ├── api/             # Retrofit interfaces & WebServices
+│       │   │   │   ├── database/        # Room Database & DAOs
+│       │   │   │   ├── di/              # Hilt modules (Network, Database)
+│       │   │   │   ├── mapper/          # DTO to Domain Mappers
+│       │   │   │   └── repositories/    # Repository implementations
+│       │   │   ├── domain/
+│       │   │   │   ├── model/           # Business entities (Article, Source)
+│       │   │   │   └── repository/      # Repository contracts
+│       │   │   └── ui/
+│       │   │       ├── screens/         # Home, Detail, Search, Settings
+│       │   │       ├── theme/           # Color, Type, Theme tokens
+│       │   │       └── utils/           # Navigation & Route definitions
+│       │   └── res/                     # Vector drawables & localized strings
+└── Brand/                               # Official design system & assets
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/MohamedMosad0/DailyNews.git
+   cd DailyNews
+   ```
+
+2. **Configure API Key**:
+   Add your NewsAPI key to `local.properties` in the project root:
+   ```properties
+   NEWS_API_KEY=your_news_api_key_here
+   ```
+
+3. **Build & Run**:
+   Open in Android Studio (Ladybug or newer) and run on an emulator or connected device running Android 7.0+ (API 24+).
 
 ---
 
 ## 🎨 Brand Identity
 
-The complete visual identity system is maintained in the [Brand](Brand/) directory:
+The app's brand identity system is defined in the [Brand Guidelines](Brand/Guidelines/Brand_Guidelines.md):
 
-- **Primary Accent**: `#E53935` (Crimson Red)
-- **Canvas Background**: `#121212` (Midnight Dark)
-- **Surface Elevation**: `#1E1E1E` (Dark Card Surface)
+- **Primary Accent**: Crimson Red (`#E53935`)
+- **Midnight Background**: Dark Canvas (`#121212`)
 - **Typography**: Poppins
-- **Guidelines**: [Brand_Guidelines.md](Brand/Guidelines/Brand_Guidelines.md)
+- **Assets Package**: SVG, PNG, PDF, and Figma source files under [Brand/](Brand/)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+See the LICENSE file for details.
