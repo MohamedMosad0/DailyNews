@@ -20,32 +20,13 @@ DailyNews is a production-grade Android application engineered with Clean Archit
 
 ## 📱 App Screenshots
 
-<table align="center">
-<tr>
-<td align="center">
-<img src="docs/screenshots/home.jpg" width="280" /><br/>
-<strong>Home</strong>
-</td>
+<img src="docs/screenshots/Home.jpg" width="280" alt="Home Screen"/>
 
-<td align="center">
-<img src="docs/screenshots/search.jpg" width="280"/><br/>
-<strong>Search</strong>
-</td>
-</tr>
+<img src="docs/screenshots/Search.jpg" width="280" alt="Search Screen"/>
 
-<tr>
-<td align="center">
-<img src="docs/screenshots/article.png" width="280" /><br/>
-<strong>Article Details</strong>
-</td>
+<img src="docs/screenshots/Article.png" width="280" alt="Article Details Screen"/>
 
-<td align="center">
-<img src="docs/screenshots/settings.jpg" width="280"/><br/>
-<strong>Settings</strong>
-</td>
-</tr>
-</table>
-
+<img src="docs/screenshots/Settings.jpg" width="280" alt="Settings Screen"/>
 ---
 
 ## ✨ Features
