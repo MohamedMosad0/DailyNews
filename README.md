@@ -20,30 +20,13 @@ PS Manager is a production-grade Android application designed to simplify the da
 
 # 📱 Screenshots
 
-<p align="center">
-<img src="assets/screenshots/dashboard-overview.png" width="230"/>
-<img src="assets/screenshots/dashboard-details.png" width="230"/>
-</p>
-
-<p align="center">
-<img src="assets/screenshots/sessions.png" width="230"/>
-<img src="assets/screenshots/inventory-products.png" width="230"/>
-</p>
-
-<p align="center">
-<img src="assets/screenshots/inventory-movements.png" width="230"/>
-<img src="assets/screenshots/reports-overview.png" width="230"/>
-</p>
-
-<p align="center">
-<img src="assets/screenshots/reports-charts.png" width="230"/>
-<img src="assets/screenshots/expenses.png" width="230"/>
-</p>
-
-<p align="center">
-<img src="assets/screenshots/receipt.png" width="230"/>
-</p>
-
+<p align="center"> 
+ <img src="assets/screenshots/dashboard-overview.png" width="230"/> 
+ <img src="assets/screenshots/dashboard-details.png" width="230"/> </p> <p align="center"> 
+ <img src="assets/screenshots/sessions.png" width="230"/> <img src="assets/screenshots/inventory-products.png" width="230"/> </p> <p align="center">
+ <img src="assets/screenshots/inventory-movements.png" width="230"/> <img src="assets/screenshots/reports-overview.png" width="230"/> </p> <p align="center"> 
+ <img src="assets/screenshots/reports-charts.png" width="230"/> <img src="assets/screenshots/expenses.png" width="230"/> </p> <p align="center">
+ <img src="assets/screenshots/receipt.png" width="230"/> </p>
 ---
 
 # ✨ Features
