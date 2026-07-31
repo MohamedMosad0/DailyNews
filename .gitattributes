@@ -1,0 +1,12 @@
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Hide PowerShell scripts and generation utilities from GitHub language statistics
+*.ps1 linguist-vendored
+*.ps1 linguist-generated=true
+generate_brand_system.ps1 linguist-vendored
+
+# Mark Brand directory as documentation/assets
+Brand/** linguist-documentation

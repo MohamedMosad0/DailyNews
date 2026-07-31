@@ -1,13 +1,13 @@
 # IntelliJ / Android Studio
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+.idea/
+.kotlin/
+.gradle/
+gradle/gradle-daemon-jvm.properties
+
+# Local configuration
+local.properties
+local.properties.*
 
 # VS Code
 .vscode/
@@ -15,20 +15,16 @@
 # AI / Agent artifacts
 .artifacts/
 
-# Local Gradle
-gradle/gradle-daemon-jvm.properties
-
-# macOS
+# OS files
 .DS_Store
+Thumbs.db
 
-# Build
-/build
+# Build & Captures
+build/
 **/build/
-
-# Android
-/captures
+captures/
 .externalNativeBuild
 .cxx
 
-# Local configuration
-local.properties
+# Logs & temp files
+*.log
