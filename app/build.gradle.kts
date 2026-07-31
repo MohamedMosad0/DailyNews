@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -69,28 +69,25 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.compose.runtime.livedata)
-    val nav_version = "2.8.5"
-    implementation("androidx.navigation:navigation-compose:$nav_version")
-    implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-    implementation("com.github.bumptech.glide:compose:1.0.0-beta08")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    val lifecycle_version = "2.10.0"
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle_version}")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${lifecycle_version}")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${lifecycle_version}")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:${lifecycle_version}")
-    val room_version = "2.8.4"
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.glide.compose)
+    implementation(libs.glide)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
 
-    implementation("com.google.dagger:hilt-android:2.57.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.57.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    implementation("androidx.datastore:datastore-preferences:1.1.2")
-    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.appcompat)
     implementation(libs.timber)
 
     testImplementation(libs.junit)
