@@ -93,7 +93,7 @@ graph TD
 | **UI** | Jetpack Compose & Material 3 | Declarative UI components and thematic styling |
 | **DI** | Hilt (Dagger) | Dependency injection container |
 | **Database** | Room | Local SQLite database persistence |
-| **Networking** | Retrofit 3 & OkHttp 4 | REST API HTTP client and interceptors |
+| **Networking** | Retrofit  & OkHttp 4 | REST API HTTP client and interceptors |
 | **Async** | Kotlin Coroutines & Flow | Asynchronous streams and reactive state handling |
 | **Images** | Glide Compose | Asynchronous image loading and disk caching |
 | **Preferences**| Preferences DataStore | Lightweight key-value preferences |
