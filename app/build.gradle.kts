@@ -13,6 +13,8 @@ android {
     namespace = "com.mohamed.dailynews"
     compileSdk = 36
 
+    val isCi = System.getenv("CI") == "true" || System.getenv("GITHUB_ACTIONS") == "true"
+
     val localProperties = Properties()
     val localPropertiesFile = rootProject.file("local.properties")
     if (localPropertiesFile.exists()) {
@@ -23,7 +25,11 @@ android {
         ?.takeIf { it.isNotBlank() }
         ?: localProperties.getProperty("NEWS_API_KEY")
         ?.takeIf { it.isNotBlank() }
-        ?: "CI_BUILD_KEY"
+        ?: ""
+
+    if (newsApiKey.isBlank() && !isCi) {
+        throw GradleException("NEWS_API_KEY is missing from local.properties. Please define NEWS_API_KEY in local.properties.")
+    }
 
     defaultConfig {
         applicationId = "com.mohamed.dailynews"
