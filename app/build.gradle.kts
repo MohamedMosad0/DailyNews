@@ -18,11 +18,12 @@ android {
     if (localPropertiesFile.exists()) {
         localProperties.load(localPropertiesFile.inputStream())
     }
-    val newsApiKey = localProperties.getProperty("NEWS_API_KEY") ?: ""
 
-    if (newsApiKey.isBlank()) {
-        throw GradleException("NEWS_API_KEY is missing from local.properties. Please define NEWS_API_KEY in local.properties.")
-    }
+    val newsApiKey = System.getenv("NEWS_API_KEY")
+        ?.takeIf { it.isNotBlank() }
+        ?: localProperties.getProperty("NEWS_API_KEY")
+        ?.takeIf { it.isNotBlank() }
+        ?: "CI_BUILD_KEY"
 
     defaultConfig {
         applicationId = "com.mohamed.dailynews"
