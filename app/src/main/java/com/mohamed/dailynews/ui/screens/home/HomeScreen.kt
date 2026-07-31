@@ -21,7 +21,6 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,7 +37,6 @@ import androidx.navigation.NavController
 import com.mohamed.dailynews.R
 import com.mohamed.dailynews.domain.model.AppLanguage
 import com.mohamed.dailynews.domain.model.AppTheme
-import com.mohamed.dailynews.ui.model.Category
 import com.mohamed.dailynews.ui.model.categories
 import com.mohamed.dailynews.ui.screens.SharedArticleViewModel
 import com.mohamed.dailynews.ui.screens.home.composables.DrawerContent
@@ -72,14 +70,9 @@ fun HomeScreen(
     val selectedArticle by sharedViewModel.selectedArticle.collectAsStateWithLifecycle()
     var showBottomSheet by remember { mutableStateOf(false) }
 
-    // News state observation
-    val newsTabs by newsViewModel.tabs.observeAsState()
-    val isNewsLoading by newsViewModel.isLoading.observeAsState(false)
-    val newsErrorMessage by newsViewModel.errorMessage.observeAsState()
-    
-    val articles by newsViewModel.articles.observeAsState()
-    val isArticlesLoading by newsViewModel.isLoadingArticles.observeAsState(false)
-    val articlesErrorMessage by newsViewModel.articlesErrorMessage.observeAsState()
+    // News state observation using StateFlow
+    val sourcesUiState by newsViewModel.sourcesUiState.collectAsStateWithLifecycle()
+    val articlesUiState by newsViewModel.articlesUiState.collectAsStateWithLifecycle()
 
     val layoutDirection = when (currentLanguage) {
         AppLanguage.ARABIC -> LayoutDirection.Rtl
@@ -148,15 +141,11 @@ fun HomeScreen(
                 Column(Modifier.padding(innerPadding)) {
                     if (selectedCategory != null) {
                         NewsTab(
-                            category = selectedCategory!!,
-                            sources = newsTabs,
-                            isSourcesLoading = isNewsLoading,
-                            sourcesErrorMessage = newsErrorMessage,
-                            articles = articles,
-                            isArticlesLoading = isArticlesLoading,
-                            articlesErrorMessage = articlesErrorMessage,
-                            onLoadSources = { categoryId: String -> newsViewModel.getSources(categoryId) },
-                            onLoadArticles = { sourceId: String -> newsViewModel.getArticles(sourceId) },
+                            category = selectedCategory,
+                            sourcesUiState = sourcesUiState,
+                            articlesUiState = articlesUiState,
+                            onLoadSources = { categoryId -> newsViewModel.getSources(categoryId) },
+                            onLoadArticles = { sourceId -> newsViewModel.getArticles(sourceId) },
                             onArticleClick = { article ->
                                 sharedViewModel.selectArticle(article)
                                 showBottomSheet = true

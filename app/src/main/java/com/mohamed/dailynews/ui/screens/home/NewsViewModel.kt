@@ -1,14 +1,17 @@
 package com.mohamed.dailynews.ui.screens.home
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mohamed.dailynews.domain.model.Article
-import com.mohamed.dailynews.domain.model.Source
 import com.mohamed.dailynews.domain.usecase.GetArticlesUseCase
 import com.mohamed.dailynews.domain.usecase.GetSourcesUseCase
+import com.mohamed.dailynews.ui.screens.home.state.ArticlesUiState
+import com.mohamed.dailynews.ui.screens.home.state.SourcesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,41 +22,45 @@ class NewsViewModel @Inject constructor(
     private val getArticlesUseCase: GetArticlesUseCase,
 ) : ViewModel() {
 
-    val tabs: MutableLiveData<List<Source>?> = MutableLiveData(null)
-    val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isLoadingArticles: MutableLiveData<Boolean> = MutableLiveData(false)
-    val errorMessage: MutableLiveData<String?> = MutableLiveData(null)
-    val articlesErrorMessage: MutableLiveData<String?> = MutableLiveData(null)
-    val articles: MutableLiveData<List<Article>?> = MutableLiveData(null)
+    private val _sourcesUiState = MutableStateFlow<SourcesUiState>(SourcesUiState.Loading)
+    val sourcesUiState: StateFlow<SourcesUiState> = _sourcesUiState.asStateFlow()
+
+    private val _articlesUiState = MutableStateFlow<ArticlesUiState>(ArticlesUiState.Initial)
+    val articlesUiState: StateFlow<ArticlesUiState> = _articlesUiState.asStateFlow()
+
+    private var getSourcesJob: Job? = null
+    private var getArticlesJob: Job? = null
 
     fun getSources(category: String) {
-        isLoading.value = true
-        viewModelScope.launch {
+        getSourcesJob?.cancel()
+        getSourcesJob = viewModelScope.launch {
+            _sourcesUiState.value = SourcesUiState.Loading
             try {
-                tabs.value = getSourcesUseCase.execute(category = category)
-                isLoading.value = false
+                val sourcesList = getSourcesUseCase.execute(category = category)
+                _sourcesUiState.value = SourcesUiState.Success(sourcesList)
             } catch (t: Throwable) {
                 if (t is CancellationException) throw t
-                isLoading.value = false
                 Timber.tag("getSources - onFailure").e("code = ${t.message}")
-                errorMessage.value = t.message ?: "Something went wrong please try again later"
+                _sourcesUiState.value = SourcesUiState.Error(
+                    t.message ?: "Something went wrong please try again later"
+                )
             }
         }
     }
 
     fun getArticles(source: String) {
-        viewModelScope.launch {
+        getArticlesJob?.cancel()
+        getArticlesJob = viewModelScope.launch {
+            _articlesUiState.value = ArticlesUiState.Loading
             try {
-                isLoadingArticles.value = true
-                val result = getArticlesUseCase.execute(source = source)
-                isLoadingArticles.value = false
-                articles.value = result
+                val articlesList = getArticlesUseCase.execute(source = source)
+                _articlesUiState.value = ArticlesUiState.Success(articlesList)
             } catch (t: Throwable) {
                 if (t is CancellationException) throw t
                 Timber.tag("getArticles - onFailure").e("body = $t")
-                isLoadingArticles.value = false
-                articlesErrorMessage.value =
+                _articlesUiState.value = ArticlesUiState.Error(
                     t.message ?: "Something went wrong please try again later"
+                )
             }
         }
     }

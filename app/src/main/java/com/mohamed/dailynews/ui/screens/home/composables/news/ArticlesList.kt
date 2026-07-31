@@ -32,14 +32,13 @@ import com.mohamed.dailynews.R
 import com.mohamed.dailynews.domain.model.Article
 import com.mohamed.dailynews.ui.composables.DefaultErrorMessage
 import com.mohamed.dailynews.ui.composables.DefaultLoadingView
+import com.mohamed.dailynews.ui.screens.home.state.ArticlesUiState
 import com.mohamed.dailynews.ui.theme.DailyNewsShapes
 
 @Composable
 fun ArticlesList(
     source: String,
-    articles: List<Article>?,
-    isArticlesLoading: Boolean,
-    articlesErrorMessage: String?,
+    articlesUiState: ArticlesUiState,
     onLoadArticles: (String) -> Unit,
     onArticleClick: (Article) -> Unit = {}
 ) {
@@ -47,44 +46,39 @@ fun ArticlesList(
         onLoadArticles(source)
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(vertical = 4.dp)
-    ) {
-        if (isArticlesLoading) {
-            item {
-                DefaultLoadingView()
+    when (articlesUiState) {
+        is ArticlesUiState.Initial, is ArticlesUiState.Loading -> {
+            DefaultLoadingView()
+        }
+        is ArticlesUiState.Error -> {
+            DefaultErrorMessage(message = articlesUiState.message) {
+                onLoadArticles(source)
             }
         }
-
-        if (articlesErrorMessage?.isNotEmpty() == true) {
-            item {
-                DefaultErrorMessage(articlesErrorMessage) {
-                    onLoadArticles(source)
-                }
-            }
-        }
-
-        if (articles != null) {
+        is ArticlesUiState.Success -> {
+            val articles = articlesUiState.articles
             if (articles.isNotEmpty()) {
-                items(articles, key = { article -> article.url ?: article.hashCode() }) { article ->
-                    ArticleItem(article = article, onClick = { onArticleClick(article) })
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(vertical = 4.dp)
+                ) {
+                    items(articles, key = { article -> article.url ?: article.hashCode() }) { article ->
+                        ArticleItem(article = article, onClick = { onArticleClick(article) })
+                    }
                 }
             } else {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(32.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.no_articles),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(32.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.no_articles),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                 }
             }
         }
