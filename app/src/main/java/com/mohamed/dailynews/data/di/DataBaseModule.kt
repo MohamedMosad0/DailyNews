@@ -25,11 +25,13 @@ object DataBaseModule {
     }
 
     @Provides
+    @Singleton
     fun provideSourcesDao(myDatabase: MyDatabase): SourcesDao {
         return myDatabase.getSourcesDao()
     }
 
     @Provides
+    @Singleton
     fun provideArticlesDao(myDatabase: MyDatabase): ArticlesDao {
         return myDatabase.getArticlesDao()
     }

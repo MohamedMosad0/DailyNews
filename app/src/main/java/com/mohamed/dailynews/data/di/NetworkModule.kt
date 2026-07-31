@@ -12,12 +12,14 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     @Provides
+    @Singleton
     fun provideApiKeyInterceptor(): Interceptor {
         return Interceptor { chain ->
             val apiKey = BuildConfig.NEWS_API_KEY
@@ -40,6 +42,7 @@ object NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor { message ->
             Timber.d("RetrofitOkHttp: $message")
@@ -53,6 +56,7 @@ object NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideOkHttpClient(
         apiKeyInterceptor: Interceptor,
         loggingInterceptor: HttpLoggingInterceptor
@@ -64,11 +68,13 @@ object NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideConverterFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
     }
 
     @Provides
+    @Singleton
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory
@@ -81,6 +87,7 @@ object NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideWebServices(retrofit: Retrofit): WebServices {
         return retrofit.create(WebServices::class.java)
     }

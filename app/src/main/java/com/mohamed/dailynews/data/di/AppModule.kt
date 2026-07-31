@@ -12,20 +12,25 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AppModule {
 
     @Binds
+    @Singleton
     abstract fun bindNewsRepo(arg: NewsRepositoryImpl): NewsRepository
 
     @Binds
+    @Singleton
     abstract fun bindNewsLocalDataSource(arg: NewsLocalDataSourceImpl): NewsLocalDataSource
 
     @Binds
+    @Singleton
     abstract fun bindNewsRemoteDataSource(arg: NewsRemoteDataSourceImpl): NewsRemoteDataSource
 
     @Binds
+    @Singleton
     abstract fun bindConnectivity(arg: ConnectivityImpl): Connectivity
 }
