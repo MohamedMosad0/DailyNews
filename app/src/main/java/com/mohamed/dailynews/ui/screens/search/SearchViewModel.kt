@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohamed.dailynews.domain.model.Article
 import com.mohamed.dailynews.domain.usecase.SearchArticlesUseCase
+import com.mohamed.dailynews.utils.error.DataError
+import com.mohamed.dailynews.utils.error.DataException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +19,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.CancellationException
+import timber.log.Timber
 import javax.inject.Inject
 
 sealed interface SearchUiState {
@@ -50,9 +53,9 @@ class SearchViewModel @Inject constructor(
                 } else {
                     emit(SearchUiState.Loading)
                     try {
-                        timber.log.Timber.tag("SearchViewModel").d("Executing searchArticlesUseCase with query='$trimmed'")
+                        Timber.tag("SearchViewModel").d("Executing searchArticlesUseCase with query='$trimmed'")
                         val articles = searchArticlesUseCase.execute(query = trimmed)
-                        timber.log.Timber.tag("SearchViewModel").d("Search succeeded with ${articles.size} articles")
+                        Timber.tag("SearchViewModel").d("Search succeeded with ${articles.size} articles")
                         if (articles.isEmpty()) {
                             emit(SearchUiState.Empty)
                         } else {
@@ -60,8 +63,18 @@ class SearchViewModel @Inject constructor(
                         }
                     } catch (t: Throwable) {
                         if (t is CancellationException) throw t
-                        timber.log.Timber.tag("SearchViewModel").e(t, "Search failed for query='$trimmed' with exception: ${t.message}")
-                        emit(SearchUiState.Error(t.message ?: "Failed to perform search. Please try again."))
+                        Timber.tag("SearchViewModel").e(t, "Search failed for query='$trimmed'")
+                        val message = when (t) {
+                            is DataException -> when (val error = t.error) {
+                                is DataError.Offline -> "No internet connection"
+                                is DataError.NoCache -> "No cached search results available."
+                                is DataError.Timeout -> "Request timed out. Please try again."
+                                is DataError.Server -> "Server error (${error.code}). Please try again later."
+                                is DataError.Unknown -> "Failed to perform search. Please try again."
+                            }
+                            else -> t.message ?: "Failed to perform search. Please try again."
+                        }
+                        emit(SearchUiState.Error(message))
                     }
                 }
             }

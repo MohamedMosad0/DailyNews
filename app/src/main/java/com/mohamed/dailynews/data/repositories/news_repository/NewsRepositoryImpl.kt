@@ -1,52 +1,109 @@
 package com.mohamed.dailynews.data.repositories.news_repository
 
-import com.mohamed.dailynews.data.mapper.SourcesMapper
 import com.mohamed.dailynews.data.mapper.toDomainArticles
+import com.mohamed.dailynews.data.mapper.toDomainSources
+import com.mohamed.dailynews.data.mapper.toEntities
 import com.mohamed.dailynews.data.repositories.news_repository.data_sources.news_local_data_source.NewsLocalDataSource
 import com.mohamed.dailynews.data.repositories.news_repository.data_sources.news_remote_data_source.NewsRemoteDataSource
 import com.mohamed.dailynews.domain.model.Article
 import com.mohamed.dailynews.domain.model.Source
 import com.mohamed.dailynews.domain.repository.NewsRepository
 import com.mohamed.dailynews.utils.Connectivity
+import com.mohamed.dailynews.utils.error.DataError
+import com.mohamed.dailynews.utils.error.DataException
+import com.mohamed.dailynews.utils.error.toDataError
 import timber.log.Timber
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
     private val localDataSource: NewsLocalDataSource,
     private val remoteDataSource: NewsRemoteDataSource,
-    private val connectivity: Connectivity,
-    private val sourcesMapper: SourcesMapper
+    private val connectivity: Connectivity
 ) : NewsRepository {
 
     override suspend fun getSources(category: String): List<Source> {
         val isConnected = connectivity.isOnline()
         Timber.tag("NewsRepository").d("getSources category='$category', isConnected=$isConnected")
-        return if (isConnected) {
-            Timber.tag("NewsRepository").d("Executing RemoteDataSource branch for category='$category'")
-            val sourcesResponse = remoteDataSource.getSources(category)
-            val sourcesList = sourcesResponse.sources ?: emptyList()
-            Timber.tag("NewsRepository").d("Remote response status='${sourcesResponse.status}', count=${sourcesList.size}, sources=$sourcesList")
-            localDataSource.saveSources(category, sourcesList)
-            sourcesMapper.toSources(sourcesList)
+
+        if (isConnected) {
+            try {
+                val sourcesResponse = remoteDataSource.getSources(category)
+                val sourcesList = sourcesResponse.sources ?: emptyList()
+                val entities = sourcesList.toEntities(category)
+                localDataSource.replaceSources(category, entities)
+                return entities.toDomainSources()
+            } catch (t: Throwable) {
+                Timber.tag("NewsRepository").e(t, "Remote fetch failed for getSources, attempting local cache fallback")
+                val cached = localDataSource.getSources(category)
+                if (cached.isNotEmpty()) {
+                    return cached.toDomainSources()
+                }
+                throw DataException(t.toDataError())
+            }
         } else {
-            Timber.tag("NewsRepository").d("Executing LocalDataSource branch for category='$category'")
-            val sources = localDataSource.getSources(category)
-            Timber.tag("NewsRepository").d("Local database sources count=${sources.size}")
-            sourcesMapper.toSources(sources)
+            val cached = localDataSource.getSources(category)
+            if (cached.isNotEmpty()) {
+                return cached.toDomainSources()
+            }
+            throw DataException(DataError.NoCache)
         }
     }
 
     override suspend fun getArticles(source: String): List<Article> {
-        Timber.tag("NewsRepository").d("getArticles source='$source'")
-        val response = remoteDataSource.getArticles(source = source)
-        Timber.tag("NewsRepository").d("getArticles response status='${response.status}', count=${response.articles?.size}")
-        return response.articles.toDomainArticles()
+        val isConnected = connectivity.isOnline()
+        Timber.tag("NewsRepository").d("getArticles source='$source', isConnected=$isConnected")
+
+        if (isConnected) {
+            try {
+                val response = remoteDataSource.getArticles(source = source)
+                val articlesList = response.articles ?: emptyList()
+                val entities = articlesList.toEntities(defaultSourceId = source)
+                localDataSource.replaceArticles(source, entities)
+                return entities.toDomainArticles()
+            } catch (t: Throwable) {
+                Timber.tag("NewsRepository").e(t, "Remote fetch failed for getArticles, attempting local cache fallback")
+                val cached = localDataSource.getArticles(source)
+                if (cached.isNotEmpty()) {
+                    return cached.toDomainArticles()
+                }
+                throw DataException(t.toDataError())
+            }
+        } else {
+            val cached = localDataSource.getArticles(source)
+            if (cached.isNotEmpty()) {
+                return cached.toDomainArticles()
+            }
+            throw DataException(DataError.NoCache)
+        }
     }
 
     override suspend fun searchArticles(query: String): List<Article> {
-        Timber.tag("NewsRepository").d("searchArticles query='$query'")
-        val response = remoteDataSource.searchArticles(query = query)
-        Timber.tag("NewsRepository").d("searchArticles response status='${response.status}', totalResults=${response.totalResults}, count=${response.articles?.size}")
-        return response.articles.toDomainArticles()
+        val isConnected = connectivity.isOnline()
+        Timber.tag("NewsRepository").d("searchArticles query='$query', isConnected=$isConnected")
+
+        if (isConnected) {
+            try {
+                val response = remoteDataSource.searchArticles(query = query)
+                val articlesList = response.articles ?: emptyList()
+                val entities = articlesList.toEntities(defaultSourceId = "search")
+                if (entities.isNotEmpty()) {
+                    localDataSource.insertArticles(entities)
+                }
+                return entities.toDomainArticles()
+            } catch (t: Throwable) {
+                Timber.tag("NewsRepository").e(t, "Remote search failed, attempting offline search fallback")
+                val cachedMatches = localDataSource.searchArticles(query)
+                if (cachedMatches.isNotEmpty()) {
+                    return cachedMatches.toDomainArticles()
+                }
+                throw DataException(t.toDataError())
+            }
+        } else {
+            val cachedMatches = localDataSource.searchArticles(query)
+            if (cachedMatches.isNotEmpty()) {
+                return cachedMatches.toDomainArticles()
+            }
+            throw DataException(DataError.NoCache)
+        }
     }
 }

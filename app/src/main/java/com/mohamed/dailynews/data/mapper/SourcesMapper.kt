@@ -1,24 +1,33 @@
 package com.mohamed.dailynews.data.mapper
 
-import com.mohamed.dailynews.data.api.model.SourceDM
+import com.mohamed.dailynews.data.api.model.SourceDto
+import com.mohamed.dailynews.data.database.entity.SourceEntity
 import com.mohamed.dailynews.domain.model.Source
-import javax.inject.Inject
 
-class SourcesMapper @Inject constructor(){
+fun SourceDto.toEntity(category: String): SourceEntity? {
+    val safeId = id?.takeIf { it.isNotBlank() } ?: return null
+    return SourceEntity(
+        id = safeId,
+        name = name,
+        description = description,
+        url = url,
+        category = category,
+        language = language,
+        country = country
+    )
+}
 
-    fun toSource(sourceDM: SourceDM): Source {
-        return Source(
-            name = sourceDM.name,
-            id = sourceDM.id
-        )
-    }
+fun List<SourceDto>?.toEntities(category: String): List<SourceEntity> {
+    return this?.mapNotNull { it.toEntity(category) } ?: emptyList()
+}
 
-    fun toSources(sources: List<SourceDM>): List<Source> {
-        return sources.map { sourceDM ->
-            return@map Source(
-                name = sourceDM.name,
-                id = sourceDM.id
-            )
-        }
-    }
+fun SourceEntity.toDomain(): Source {
+    return Source(
+        id = id,
+        name = name
+    )
+}
+
+fun List<SourceEntity>?.toDomainSources(): List<Source> {
+    return this?.map { it.toDomain() } ?: emptyList()
 }

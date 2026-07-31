@@ -8,7 +8,7 @@ data class ArticlesResponse(
     val totalResults: Int? = null,
 
     @field:SerializedName("articles")
-    val articles: List<ArticleDM>? = null,
+    val articles: List<ArticleDto>? = null,
 
     @field:SerializedName("status")
     val status: String? = null
