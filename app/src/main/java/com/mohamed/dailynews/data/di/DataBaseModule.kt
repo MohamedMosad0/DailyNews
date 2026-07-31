@@ -20,6 +20,7 @@ object DataBaseModule {
     @Singleton
     fun provideMyDatabase(@ApplicationContext context: Context): MyDatabase {
         return Room.databaseBuilder(context, MyDatabase::class.java, "daily_news.db")
+            // Destructive migration is acceptable because the local database stores transient, re-fetchable news cache only.
             .fallbackToDestructiveMigration()
             .build()
     }
