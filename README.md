@@ -1,165 +1,212 @@
 <div align="center">
 
-![DailyNews GitHub Banner](Brand/Banner/github_banner_1500x500.png)
+<img src="assets/banner/banner.png" alt="PS Manager Banner"/>
 
-# DailyNews
+# PS Manager
 
-### Modern Android News App built with Jetpack Compose
+### Modern Android Management System for PlayStation Gaming Centers
 
-DailyNews is a production-grade Android application engineered with Clean Architecture and MVVM patterns. It delivers real-time breaking world news across multiple categories with full offline caching, dynamic localization, and modern Material 3 styling.
+PS Manager is a production-grade Android application designed to simplify the daily management of PlayStation gaming centers. It provides complete session management, inventory tracking, financial reporting, receipt generation, analytics, backup & restore, and business insights using modern Android development practices.
 
 [![Android](https://img.shields.io/badge/Platform-Android-3DDC84?style=flat-square&logo=android&logoColor=white)](https://developer.android.com)
-[![Kotlin](https://img.shields.io/badge/Language-Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white)](https://kotlinlang.org)
-[![Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
-[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20MVVM-FF6F00?style=flat-square)](https://developer.android.com/topic/architecture)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Kotlin](https://img.shields.io/badge/Language-Kotlin-2.2.10-7F52FF?style=flat-square&logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20MVVM-blue?style=flat-square)]()
+[![Material3](https://img.shields.io/badge/UI-Material%203-1976D2?style=flat-square)]()
+[![License](https://img.shields.io/badge/License-MIT-success?style=flat-square)](LICENSE)
 
 </div>
 
 ---
 
-## 📱 App Screenshots
-<table align="center">
-<tr>
-<td align="center">
-<img src="docs/screenshots/Home.jpg"> width="280" alt="Home Screen"/><br/>
-<strong>Home</strong>
-</td>
+# 📱 Screenshots
 
-<td align="center">
-<img src="docs/screenshots/Search.jpg"> width="280" alt="Search Screen"/><br/>
-<strong>Search</strong>
-</td>
-</tr>
+<p align="center">
+<img src="assets/screenshots/dashboard-overview.png" width="230"/>
+<img src="assets/screenshots/dashboard-details.png" width="230"/>
+</p>
 
-<tr>
-<td align="center">
-<img src="docs/screenshots/Article%20Details.png"> width="280" alt="Article Details Screen"/><br/>
-<strong>Article Details</strong>
-</td>
+<p align="center">
+<img src="assets/screenshots/sessions.png" width="230"/>
+<img src="assets/screenshots/inventory-products.png" width="230"/>
+</p>
 
-<td align="center">
-<img src="docs/screenshots/Settings.jpg"> width="280" alt="Settings Screen"/><br/>
-<strong>Settings</strong>
-</td>
-</tr>
-</table>
+<p align="center">
+<img src="assets/screenshots/inventory-movements.png" width="230"/>
+<img src="assets/screenshots/reports-overview.png" width="230"/>
+</p>
 
-## ✨ Features
+<p align="center">
+<img src="assets/screenshots/reports-charts.png" width="230"/>
+<img src="assets/screenshots/expenses.png" width="230"/>
+</p>
 
-- 📰 Real-time news updates
-- 🔍 Instant article search
-- 📂 Category browsing
-- 💾 Offline caching with Room
-- 🌍 English & Arabic (RTL)
-- 🎨 Material 3 UI
-- ⚡ Kotlin Coroutines & Flow
-- 📱 Clean Architecture (MVVM)
+<p align="center">
+<img src="assets/screenshots/receipt.png" width="230"/>
+</p>
 
 ---
 
-## 🏛️ Architecture
+# ✨ Features
 
-DailyNews follows Google's recommended **Clean Architecture** guidelines, separating code into distinct, testable layers:
+- 🎮 PlayStation session management
+- ⏱ Live session timer
+- ⏸ Pause & Resume sessions
+- 💰 Automatic session pricing
+- 📦 Inventory & stock management
+- 📈 Product movement history
+- 💸 Expense management
+- 🧾 Receipt generation
+- 📊 Business reports & analytics
+- 📉 Charts & KPIs Dashboard
+- 🌍 Arabic & English localization
+- 💱 Multi-currency support
+- 🌙 Dark mode
+- 💾 Backup & Restore
+- ⚡ Offline-first architecture powered by Room
+- 🔔 Session notifications & alarms
+
+---
+
+# 🏛 Architecture
+
+PS Manager follows Google's recommended **Clean Architecture** with the **MVVM** design pattern, keeping business logic independent from Android framework components.
 
 ```mermaid
 graph TD
-    subgraph UI ["Presentation Layer (Jetpack Compose)"]
-        UI_Screens["Screens & Composables"] --> UI_ViewModels["ViewModels (StateFlow)"]
-    end
 
-    subgraph Domain ["Domain Layer (Business Logic)"]
-        UI_ViewModels --> Domain_UseCases["Use Cases / Repositories Interfaces"]
-        Domain_Models["Domain Models"]
-    end
+UI[Presentation Layer]
 
-    subgraph Data ["Data Layer (Data Sources)"]
-        Domain_UseCases --> Data_RepoImpl["Repository Implementation"]
-        Data_RepoImpl --> Data_Local["Local Data Source (Room DB)"]
-        Data_RepoImpl --> Data_Remote["Remote Data Source (Retrofit API)"]
-    end
+VM[ViewModels]
+
+UC[Use Cases]
+
+Repo[Repository]
+
+Local[(Room Database)]
+
+DataStore[(DataStore)]
+
+UI --> VM
+VM --> UC
+UC --> Repo
+Repo --> Local
+Repo --> DataStore
 ```
 
-- **UI Layer**: Composable screens observed from `ViewModel` `StateFlow` states.
-- **Domain Layer**: Core business models and repository interfaces independent of Android framework code.
-- **Data Layer**: Coordinates local cache (Room) and remote REST endpoints (Retrofit) with automatic failover.
+### Layers
+
+- **Presentation** — Activities, Fragments, ViewModels and UI State.
+- **Domain** — Business models, repository contracts and use cases.
+- **Data** — Repository implementations, Room database, DataStore and local persistence.
 
 ---
 
-## 🛠️ Tech Stack & Libraries
+# 🛠 Tech Stack
 
 | Category | Library / Tool | Purpose |
-|---|---|---|
-| **UI** | Jetpack Compose & Material 3 | Declarative UI components and thematic styling |
-| **DI** | Hilt (Dagger) | Dependency injection container |
-| **Database** | Room | Local SQLite database persistence |
-| **Networking** | Retrofit  & OkHttp 4 | REST API HTTP client and interceptors |
-| **Async** | Kotlin Coroutines & Flow | Asynchronous streams and reactive state handling |
-| **Images** | Glide Compose | Asynchronous image loading and disk caching |
-| **Preferences**| Preferences DataStore | Lightweight key-value preferences |
-| **Logging** | Timber | Production-guarded debug logging |
+|------------|----------------|----------|
+| Language | Kotlin | Main programming language |
+| Architecture | Clean Architecture + MVVM | Separation of concerns |
+| Dependency Injection | Hilt | Dependency management |
+| Database | Room | Offline-first local storage |
+| Preferences | DataStore | User settings |
+| Async | Kotlin Coroutines & Flow | Reactive programming |
+| UI | Material Design 3 + ViewBinding | Modern Android UI |
+| Navigation | Navigation Component | Screen navigation |
+| Charts | MPAndroidChart | Reports visualization |
+| Background | WorkManager & AlarmManager | Notifications & scheduled tasks |
+| Logging | Timber | Debug logging |
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
+```text
+app/
+├── core/
+│   ├── constants/
+│   ├── extensions/
+│   ├── helpers/
+│   └── utils/
+│
+├── data/
+│   ├── local/
+│   ├── repository/
+│   └── datastore/
+│
+├── domain/
+│   ├── model/
+│   ├── repository/
+│   └── usecase/
+│
+├── di/
+│
+└── presentation/
+    ├── ui/
+    ├── state/
+    ├── adapter/
+    └── viewmodel/
 ```
-DailyNews/
-├── app/
-│   └── src/
-│       ├── main/
-│       │   ├── java/com/mohamed/dailynews/
-│       │   │   ├── data/
-│       │   │   │   ├── api/             # Retrofit interfaces & WebServices
-│       │   │   │   ├── database/        # Room Database & DAOs
-│       │   │   │   ├── di/              # Hilt modules (Network, Database)
-│       │   │   │   ├── mapper/          # DTO to Domain Mappers
-│       │   │   │   └── repositories/    # Repository implementations
-│       │   │   ├── domain/
-│       │   │   │   ├── model/           # Business entities (Article, Source)
-│       │   │   │   └── repository/      # Repository contracts
-│       │   │   └── ui/
-│       │   │       ├── screens/         # Home, Detail, Search, Settings
-│       │   │       ├── theme/           # Color, Type, Theme tokens
-│       │   │       └── utils/           # Navigation & Route definitions
-│       │   └── res/                     # Vector drawables & localized strings
-└── Brand/                               # Official design system & assets
+
+---
+
+# ⚙️ Getting Started
+
+## Clone
+
+```bash
+git clone https://github.com/MohamedMosad0/Playstation-Manager.git
+```
+
+## Requirements
+
+- Android Studio Narwhal (or newer)
+- JDK 17+
+- Android SDK
+- Gradle
+
+## Build
+
+```bash
+./gradlew assembleDebug
 ```
 
 ---
 
-## ⚙️ Installation & Setup
+# 🧪 Testing
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/MohamedMosad0/DailyNews.git
-   cd DailyNews
-   ```
+The project includes:
 
-2. **Configure API Key**:
-   Add your NewsAPI key to `local.properties` in the project root:
-   ```properties
-   NEWS_API_KEY=your_news_api_key_here
-   ```
+- Unit Tests
+- ViewModel Tests
+- Repository Tests
+- DataStore Tests
+- Fake Repository based testing
+- GitHub Actions Continuous Integration
 
-3. **Build & Run**:
-   Open in Android Studio (Ladybug or newer) and run on an emulator or connected device running Android 7.0+ (API 24+).
+Run all tests:
 
----
-
-## 🎨 Brand Identity
-
-The app's brand identity system is defined in the [Brand Guidelines](Brand/Guidelines/Brand_Guidelines.md):
-
-- **Primary Accent**: Crimson Red (`#E53935`)
-- **Midnight Background**: Dark Canvas (`#121212`)
-- **Typography**: Poppins
-- **Assets Package**: SVG, PNG, PDF, and Figma source files under [Brand/](Brand/)
+```bash
+./gradlew testDebugUnitTest
+```
 
 ---
 
-## 📄 License
+# 🚀 Release
+
+Release builds are verified using:
+
+- R8 Code Shrinking
+- Resource Shrinking
+- ProGuard Rules
+- GitHub Actions CI
+- Lint
+- Unit Tests
+
+---
+
+# 📄 License
 
 This project is licensed under the MIT License.
 
-See the LICENSE file for details.
+See the LICENSE file for more information.
