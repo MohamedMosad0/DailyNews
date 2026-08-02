@@ -20,9 +20,11 @@ DailyNews is a modern Android application built with Jetpack Compose and Clean A
 ## 📱 Screenshots
 
 <p align="center"> 
- <img src="assets/screenshots/home.png" width="230" alt="Home Screen"/> 
- <img src="assets/screenshots/search.png" width="230" alt="Search Screen"/> 
- <img src="assets/screenshots/settings.png" width="230" alt="Settings Screen"/> 
+  <img src="docs/screenshots/Home.jpg" width="180" alt="Home"/> 
+  <img src="docs/screenshots/news-sources.jpg" width="180" alt="News Sources"/> 
+  <img src="docs/screenshots/search-articles.jpg" width="180" alt="Search Articles"/> 
+  <img src="docs/screenshots/article-details.jpg" width="180" alt="Article Details"/> 
+  <img src="docs/screenshots/Settings.jpg" width="180" alt="Settings"/> 
 </p>
 
 ---
