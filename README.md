@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="Brand/Banner/github_banner_1500x500.png" alt="DailyNews Banner" width="100%"/>
+
 # 📰 DailyNews
 
 ### Production-Grade Offline-First Android News Application
@@ -19,13 +21,36 @@ DailyNews is a modern Android application built with Jetpack Compose and Clean A
 
 ## 📱 Screenshots
 
-<p align="center"> 
-  <img src="docs/screenshots/Home.jpg" width="180" alt="Home"/> 
-  <img src="docs/screenshots/news-sources.jpg" width="180" alt="News Sources"/> 
-  <img src="docs/screenshots/search-articles.jpg" width="180" alt="Search Articles"/> 
-  <img src="docs/screenshots/article-details.jpg" width="180" alt="Article Details"/> 
-  <img src="docs/screenshots/Settings.jpg" width="180" alt="Settings"/> 
-</p>
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <b>Home</b><br/><br/>
+        <img src="docs/screenshots/Home.jpg" width="230" alt="Home"/>
+      </td>
+      <td align="center">
+        <b>News Sources</b><br/><br/>
+        <img src="docs/screenshots/news-sources.jpg" width="230" alt="News Sources"/>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <b>Search Articles</b><br/><br/>
+        <img src="docs/screenshots/search-articles.jpg" width="230" alt="Search Articles"/>
+      </td>
+      <td align="center">
+        <b>Article Details</b><br/><br/>
+        <img src="docs/screenshots/article-details.jpg" width="230" alt="Article Details"/>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" colspan="2">
+        <b>Settings</b><br/><br/>
+        <img src="docs/screenshots/Settings.jpg" width="230" alt="Settings"/>
+      </td>
+    </tr>
+  </table>
+</div>
 
 ---
 
